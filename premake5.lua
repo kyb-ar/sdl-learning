@@ -14,11 +14,15 @@ project "sdl_learning"
 
   includedirs {
     "include",
+    "/opt/homebrew/Cellar/sdl2/2.32.2/include",
+  }
+
+  libdirs {
+    "/opt/homebrew/Cellar/sdl2/2.32.2/lib",
   }
 
   links {
     "SDL2",
-    "gtest"
   }
 
   defines {
