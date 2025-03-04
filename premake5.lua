@@ -5,6 +5,7 @@ project "sdl_learning"
 
   kind "ConsoleApp"
   language "C++"
+  cppdialect "C++11"
   targetdir "bin"
 
   files {
