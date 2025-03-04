@@ -3,20 +3,6 @@ import fire
 import os
 import subprocess
 import shutil
-import shlex
-import platform
-
-
-def get_os():
-    if os.name == "nt":
-        return "Windows"
-    elif os.name == "posix":
-        if platform.system() == "Darwin":
-            return "macOS"
-        else:
-            return "Linux or other Unix-like"
-    else:
-        return "Unknown"
 
 
 class Build:
@@ -24,11 +10,7 @@ class Build:
 
     def run(self):
         subprocess.run(["premake5", "gmake"])
-        build = "linux_release"
-        if get_os == "macOS":
-            build = "mac_release"
-        s = shlex.shlex(f"make config={build}")
-        subprocess.run(list(s), shell=True)
+        subprocess.run(["make", "config", "=", "linux_release"], shell=True)
         to_run = os.path.join("./bin/sdl_learning")
         subprocess.run(to_run)
 
@@ -37,7 +19,10 @@ class Build:
             "obj",
             "bin",
         ]
-        files = ["Makefile", "sdl_learning.make"]
+        files = [
+            "Makefile",
+            "sdl_learning.make"
+        ]
 
         for d in dirs:
             if os.path.exists(d):

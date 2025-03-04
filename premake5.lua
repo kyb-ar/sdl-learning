@@ -1,6 +1,5 @@
 workspace "sdl_learning"
   configurations { "Debug", "Release" }
-  platforms { "Windows", "Linux", "Mac" }
 
 project "sdl_learning"
 
