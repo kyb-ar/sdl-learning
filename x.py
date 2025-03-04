@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-import fire
 import os
 import subprocess
 import shutil
+import sys
 
 
 class Build:
@@ -19,10 +19,7 @@ class Build:
             "obj",
             "bin",
         ]
-        files = [
-            "Makefile",
-            "sdl_learning.make"
-        ]
+        files = ["Makefile", "sdl_learning.make"]
 
         for d in dirs:
             if os.path.exists(d):
@@ -32,5 +29,13 @@ class Build:
                 os.remove(f)
 
 
+def no_func():
+    print("Command not found!")
+
+
 if __name__ == "__main__":
-    fire.Fire(Build)
+    command = "run"
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+    build = Build()
+    getattr(build, command, no_func)()
