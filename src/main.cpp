@@ -18,7 +18,6 @@ enum KeyPressSurfaces {
 };
 
 bool init();
-bool loadMedia();
 void close();
 
 // Loads individual image
@@ -44,23 +43,25 @@ SDL_Surface *loadSurface(std::string path) {
   return loadedSurface;
 }
 
-bool loadMedia() {
-  int i = 0;
-  std::list<std::string> files = {
-      "04_key_presses/press.bmp", "04_key_presses/up.bmp",
-      "04_key_presses/down.bmp",  "04_key_presses/left.bmp",
-      "04_key_presses/right.bmp",
-  };
-
-  for (const std::string &file : files) {
-    gKeyPressSurfaces[i] = loadSurface(file);
-    if (gKeyPressSurfaces[i] == NULL) {
-      return false;
-    }
-    i++;
+SDL_Surface *loadMedia(std::string path) {
+  SDL_Surface *optimizedSurface = NULL;
+  SDL_Surface *loadedSurface = SDL_LoadBMP(path.c_str());
+  if (loadedSurface == NULL) {
+    printf("unable to load image %s! SDL Error: %s\n", path.c_str(),
+           SDL_GetError());
+    return NULL;
   }
 
-  return true;
+  // Convert surface to screen format
+  optimizedSurface =
+      SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
+  SDL_FreeSurface(loadedSurface);
+  if (optimizedSurface == NULL) {
+    printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(),
+           SDL_GetError());
+    return NULL;
+  }
+  return optimizedSurface;
 }
 
 bool init() {
@@ -102,10 +103,16 @@ int main(int argc, char *args[]) {
     return 1;
   }
 
-  if (!loadMedia()) {
-    printf("Failed to load media!\n");
-    close();
-    return 1;
+  std::list<std::string> files = {
+      "04_key_presses/press.bmp", "04_key_presses/up.bmp",
+      "04_key_presses/down.bmp",  "04_key_presses/left.bmp",
+      "04_key_presses/right.bmp",
+  };
+
+  int i = 0;
+  for (const std::string &file : files) {
+    gKeyPressSurfaces[i] = loadMedia(file);
+    i++;
   }
 
   SDL_Event e;
