@@ -24,6 +24,7 @@ project "sdl_learning"
 
   links {
     "SDL2",
+    "SDL2_image"
   }
 
   defines {
