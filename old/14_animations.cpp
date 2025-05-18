@@ -35,12 +35,6 @@ public:
   // Sets the texture color modulation
   void setColor(Uint8 r, Uint8 g, Uint8 b);
 
-  // Sets the texture blend mode
-  void setBlendMode(SDL_BlendMode blending);
-
-  // Set Alpha Modulation
-  void setAlpha(Uint8 alpha);
-
   // Gets image dimensions
   int getWidth();
   int getHeight();
@@ -128,40 +122,48 @@ void LTexture::render(int x, int y, SDL_Rect *clip) {
   SDL_RenderCopy(gRenderer, mTexture, clip, &renderQuad);
 }
 
-void LTexture::setBlendMode(SDL_BlendMode blending) {
-  SDL_SetTextureBlendMode(mTexture, blending);
-};
-
-void LTexture::setAlpha(Uint8 alpha) {
-  SDL_SetTextureAlphaMod(mTexture, alpha);
-}
-
 int LTexture::getWidth() { return mWidth; }
 
 int LTexture::getHeight() { return mHeight; }
 
-LTexture gModulatedTexture;
-LTexture gBackgroundTexture;
+const int WALKING_ANIMATION_FRAMES = 4;
+SDL_Rect gSpriteClips[WALKING_ANIMATION_FRAMES];
+LTexture gSpriteSheetTexture;
 
 bool loadMedia() {
   // Load foo texture
-  if (!gModulatedTexture.loadFromFile("13_alpha_blending/fadeout.png")) {
+  if (!gSpriteSheetTexture.loadFromFile(
+          "14_animated_sprites_and_vsync/foo.png")) {
     printf("Failed to load Foo texture image!\n");
     return false;
   }
-  gModulatedTexture.setBlendMode(SDL_BLENDMODE_BLEND);
+  // Set sprite clips
+  gSpriteClips[0].x = 0;
+  gSpriteClips[0].y = 0;
+  gSpriteClips[0].w = 64;
+  gSpriteClips[0].h = 205;
 
-  if (!gBackgroundTexture.loadFromFile("13_alpha_blending/fadein.png")) {
-    printf("Failed to load background texture!");
-    return false;
-  }
+  gSpriteClips[1].x = 64;
+  gSpriteClips[1].y = 0;
+  gSpriteClips[1].w = 64;
+  gSpriteClips[1].h = 205;
+
+  gSpriteClips[2].x = 128;
+  gSpriteClips[2].y = 0;
+  gSpriteClips[2].w = 64;
+  gSpriteClips[2].h = 205;
+
+  gSpriteClips[3].x = 192;
+  gSpriteClips[3].y = 0;
+  gSpriteClips[3].w = 64;
+  gSpriteClips[3].h = 205;
 
   return true;
 }
 
 void close() {
   // Free loaded images
-  gModulatedTexture.free();
+  gSpriteSheetTexture.free();
 
   // Destroy Window
   SDL_DestroyRenderer(gRenderer);
@@ -203,7 +205,7 @@ int main(int argc, char *args[]) {
   // While application is running
   bool quit = false;
   SDL_Event e;
-  Uint8 a = 255;
+  int frame = 0;
 
   if (!loadMedia()) {
     return 1;
@@ -214,23 +216,6 @@ int main(int argc, char *args[]) {
       // User requests quit
       if (e.type == SDL_QUIT) {
         quit = true;
-      } else if (e.type == SDL_KEYDOWN) {
-        if (e.key.keysym.sym == SDLK_w) {
-          // Cap if over 255
-          if (a + 32 > 255) {
-            a = 255;
-          } else {
-            a += 32;
-          }
-        }
-
-        if (e.key.keysym.sym == SDLK_s) {
-          if (a - 32 < 0) {
-            a = 0;
-          } else {
-            a -= 32;
-          }
-        }
       }
     }
 
@@ -238,10 +223,15 @@ int main(int argc, char *args[]) {
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(gRenderer);
 
-    gBackgroundTexture.render(0, 0);
+    SDL_Rect *currentClip = &gSpriteClips[frame / 4];
+    gSpriteSheetTexture.render((SCREEN_WIDTH - currentClip->w) / 2,
+                               (SCREEN_HEIGHT - currentClip->h) / 2,
+                               currentClip);
 
-    gModulatedTexture.setAlpha(a);
-    gModulatedTexture.render(0, 0);
+    frame++;
+    if (frame / 4 >= WALKING_ANIMATION_FRAMES) {
+      frame = 0;
+    }
 
     SDL_RenderPresent(gRenderer);
   }
