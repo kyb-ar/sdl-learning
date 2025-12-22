@@ -36,7 +36,7 @@ bool Engine::Init() {
   }
   TextureManager::GetInstance()->LoadTexture("tree", "assets/tree.png");
   TextureManager::GetInstance()->LoadTexture("player", "assets/idle.png");
-  player = new Warrior(new Properties("player", 100, 200, 136, 96));
+  player = new Warrior(new Properties("player", 100, 480, 136, 96));
 
   return m_IsRunning = true;
 };
