@@ -2,9 +2,6 @@
 #include "../character/warrior.h"
 #include "../graphics/texture_manager.h"
 #include "../object/game_object.h"
-#include "../physics/transform.h"
-#include "../physics/vector_2d.h"
-#include <iostream>
 
 #include <SDL2/SDL_image.h>
 
