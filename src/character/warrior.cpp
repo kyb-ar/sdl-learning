@@ -1,18 +1,25 @@
 
 #include "warrior.h"
-#include "../graphics/texture_manager.h"
 #include <SDL2/SDL.h>
 
-void Warrior::Draw() {
-  TextureManager::GetInstance()->DrawFrame(m_TextureID, m_Transform->x,
-                                           m_Transform->y, m_Width, m_Height,
-                                           m_Row, m_Frame);
+Warrior::Warrior(Properties *props) : Character(props) {
+  m_Animation = new Animation();
+  m_Animation->SetProps(m_TextureID, 0, 6, 60, SDL_FLIP_HORIZONTAL);
+  m_RigidBody = new RigidBody();
 };
 
-void Warrior::Clean(){
+void Warrior::Draw() {
+  m_Animation->Draw(m_Transform->x, m_Transform->y, m_Width, m_Height);
+};
+
+void Warrior::Clean() {
 
 };
 
 void Warrior::Update(float dt) {
-  m_Frame = (SDL_GetTicks() / m_AnimSpeed) % m_FrameCount;
+  m_RigidBody->Update(0.1);
+  m_RigidBody->ApplyForce(Vec2(10));
+  m_Transform->x = m_RigidBody->GetPosition().x;
+  m_Transform->y = m_RigidBody->GetPosition().y;
+  m_Animation->Update();
 };

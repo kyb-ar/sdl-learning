@@ -1,22 +1,20 @@
 #pragma once
 
+#include "../animation/animation.h"
 #include "../object/game_object.h"
+#include "../physics/rigid_body.h"
 #include "character.h"
 
 class Warrior : Character {
 
 public:
-  Warrior(Properties *props) : Character(props) {
-    m_Row = 0;
-    m_Frame = 0;
-    m_FrameCount = 6;
-    m_AnimSpeed = 60;
-  };
+  Warrior(Properties *props);
 
   void Draw() override;
   void Clean() override;
   void Update(float dt) override;
 
 private:
-  int m_Row, m_Frame, m_FrameCount, m_AnimSpeed;
+  Animation *m_Animation;
+  RigidBody *m_RigidBody;
 };
