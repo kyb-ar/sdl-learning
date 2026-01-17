@@ -33,8 +33,8 @@ public:
   void Update(float dt) {
     m_Acceleration.x = (m_Force.x + m_Friction.x) / m_Mass;
     m_Acceleration.y = m_Gravity + m_Force.y / m_Mass;
-    m_Velocity = m_Velocity + (m_Acceleration * dt);
-    m_Position = m_Position + (m_Velocity * dt);
+    m_Velocity = (m_Acceleration * dt);
+    m_Position = (m_Velocity * dt);
   };
 
 private:

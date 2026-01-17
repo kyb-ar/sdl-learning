@@ -1,6 +1,7 @@
 #include "engine.h"
 #include "../character/warrior.h"
 #include "../graphics/texture_manager.h"
+#include "../input/input.h"
 #include "../object/game_object.h"
 
 #include <SDL2/SDL_image.h>
@@ -32,8 +33,9 @@ bool Engine::Init() {
     SDL_Log("Failed to create Renderer: %s", SDL_GetError());
   }
   TextureManager::GetInstance()->LoadTexture("tree", "assets/tree.png");
-  TextureManager::GetInstance()->LoadTexture("player", "assets/idle.png");
-  player = new Warrior(new Properties("player", 100, 480, 136, 96));
+  TextureManager::GetInstance()->LoadTexture("player_idle", "assets/idle.png");
+  TextureManager::GetInstance()->LoadTexture("player_run", "assets/run.png");
+  player = new Warrior(new Properties("player_run", 100, 480, 136, 96));
 
   return m_IsRunning = true;
 };
@@ -67,13 +69,4 @@ void Engine::Render() {
   SDL_RenderPresent(m_Renderer);
 };
 
-void Engine::Events() {
-  SDL_Event event;
-  SDL_PollEvent(&event);
-  switch (event.type) {
-  case SDL_QUIT:
-    SDL_Log("GOT A QUIT EVENT!");
-    Quit();
-    break;
-  }
-};
+void Engine::Events() { Input::GetInstance()->Listen(); };
