@@ -20,7 +20,7 @@ bool Engine::Init() {
   }
 
   m_Window =
-      SDL_CreateWindow("Cool Engine", SDL_WINDOWPOS_CENTERED,
+      SDL_CreateWindow("Cool Engine SDL Learning", SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
   if (m_Window == nullptr) {
     SDL_Log("Failed to create Window: %s", SDL_GetError());

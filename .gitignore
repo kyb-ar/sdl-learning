@@ -4,3 +4,8 @@ sdl_learning.make
 Makefile
 compile_commands
 .cache/
+
+# Bazel
+bazel-*
+.bazelrc.user
+MODULE.bazel.lock

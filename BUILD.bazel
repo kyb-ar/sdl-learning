@@ -1,0 +1,32 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+# SDL2 system libraries
+cc_library(
+    name = "sdl2",
+    linkopts = [
+        "-lSDL2",
+        "-lSDL2_image",
+        "-lSDL2_ttf",
+        "-lSDL2_net",
+        "-lSDL2_mixer",
+        "-lSDL2_gfx",
+    ],
+)
+
+cc_binary(
+    name = "sdl_learning",
+    srcs = glob([
+        "src/**/*.cpp",
+        "src/**/*.h",
+    ]),
+    copts = [
+        "-std=c++17",
+    ],
+    data = glob(["assets/**"]),
+    defines = [
+        "_CRT_SECURE_NO_WARNINGS",
+        "GLFW_INCLUDE_NONE",
+    ],
+    includes = ["src"],
+    deps = [":sdl2"],
+)

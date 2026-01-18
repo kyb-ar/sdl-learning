@@ -1,0 +1,15 @@
+# Build configurations
+
+# Debug configuration (default)
+build --compilation_mode=dbg
+
+# Release configuration
+build:release --compilation_mode=opt
+build:release --copt=-O2
+build:release --linkopt=-s
+
+# Common settings
+build --cxxopt=-std=c++17
+
+# Output settings
+build --symlink_prefix=bazel-
