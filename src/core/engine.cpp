@@ -3,6 +3,7 @@
 #include "../graphics/texture_manager.h"
 #include "../input/input.h"
 #include "../object/game_object.h"
+#include "../timer/timer.h"
 
 #include <SDL2/SDL_image.h>
 
@@ -52,8 +53,9 @@ bool Engine::Clean() {
 void Engine::Quit() { m_IsRunning = false; };
 
 void Engine::Update() {
+  float dt = Timer::GetInstance()->GetDeltaTime();
   if (player != nullptr) {
-    player->Update(0);
+    player->Update(dt);
   }
 };
 
